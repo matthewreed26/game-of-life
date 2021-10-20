@@ -5,7 +5,7 @@
 </template>
 
 <script>
-  import GameOfLife from './components/GameOfLife.vue';
+  import GameOfLife from './components/game-of-life/GameOfLife.vue';
 
   export default {
     name: 'App',
