@@ -4,15 +4,16 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+  import Vue from 'vue';
   import GameOfLife from './components/game-of-life/GameOfLife.vue';
 
-  export default {
+  export default Vue.extend({
     name: 'App',
     components: {
       GameOfLife,
     },
-  };
+  });
 </script>
 
 <style>
