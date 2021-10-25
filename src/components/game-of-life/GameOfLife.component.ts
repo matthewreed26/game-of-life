@@ -1,8 +1,10 @@
-export default {
+import Vue from 'vue';
+
+export default Vue.extend({
   name: 'GameOfLife',
   data() {
     return {
-      grid: [[false]],
+      grid: [[{ id: -1, alive: false }]],
       numRows: 4,
       numCols: 8,
     };
@@ -11,19 +13,19 @@ export default {
     this.generateEmptyGrid();
   },
   methods: {
-    generateEmptyGrid() {
+    generateEmptyGrid(): void {
       const alive = false;
       let idCount = 0;
       this.grid = [];
       for (let rowNum = 0; rowNum < this.numRows; rowNum++) {
-        let row = [];
+        const row = [];
         for (let colNum = 0; colNum < this.numCols; colNum++) {
           row.push({ id: idCount++, alive });
         }
         this.grid.push(row);
       }
     },
-    toggleCell(cellId) {
+    toggleCell(cellId: number): void {
       this.grid.forEach((row) =>
         row.forEach((col) => {
           if (col.id === cellId) {
@@ -32,11 +34,11 @@ export default {
         })
       );
     },
-    nextGenerationGrid() {
+    nextGenerationGrid(): void {
       let idCount = 0;
-      let nextGenerationGrid = [];
+      const nextGenerationGrid = [];
       for (let rowNum = 0; rowNum < this.numRows; rowNum++) {
-        let row = [];
+        const row = [];
         for (let colNum = 0; colNum < this.numCols; colNum++) {
           row.push({
             id: idCount++,
@@ -47,7 +49,7 @@ export default {
       }
       this.grid = nextGenerationGrid;
     },
-    checkNeighbors(rowNum, colNum) {
+    checkNeighbors(rowNum: number, colNum: number): boolean {
       const leftHorizontalNeighbor =
         rowNum === 0 ? 0 : +this.grid[rowNum - 1][colNum].alive;
       const rightHorizontalNeighbor =
@@ -90,4 +92,4 @@ export default {
       }
     },
   },
-};
+});

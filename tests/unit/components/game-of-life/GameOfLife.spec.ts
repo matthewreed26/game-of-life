@@ -1,5 +1,5 @@
-import { shallowMount } from '@vue/test-utils';
-import GameOfLife from '@/components/game-of-life/GameOfLife';
+import { shallowMount, Wrapper } from '@vue/test-utils';
+import GameOfLifeVue from '@/components/game-of-life/GameOfLife.vue';
 
 const empty4By8Grid = [
   [
@@ -141,7 +141,9 @@ const empty4By8Grid = [
 ];
 
 describe('GameOfLife', () => {
-  const wrapper = shallowMount(GameOfLife);
+  const wrapper: Wrapper<GameOfLifeVue & { [key: string]: any }> = shallowMount(
+    GameOfLifeVue
+  );
   const component = wrapper.vm;
 
   it('Should exist with default values', () => {
