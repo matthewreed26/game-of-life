@@ -25,7 +25,7 @@ export default Vue.extend({
         this.grid.push(row);
       }
     },
-    toggleCell(cellId: number): void {
+    toggleCellLife(cellId: number): void {
       this.grid.forEach((row) =>
         row.forEach((col) => {
           if (col.id === cellId) {
@@ -34,7 +34,7 @@ export default Vue.extend({
         })
       );
     },
-    nextGenerationGrid(): void {
+    generateNextGenerationGrid(): void {
       let idCount = 0;
       const nextGenerationGrid = [];
       for (let rowNum = 0; rowNum < this.numRows; rowNum++) {
@@ -42,21 +42,27 @@ export default Vue.extend({
         for (let colNum = 0; colNum < this.numCols; colNum++) {
           row.push({
             id: idCount++,
-            alive: this.checkNeighbors(rowNum, colNum),
+            alive: this.assertCurrentNeighborsLivesForNextGenCellLife(
+              rowNum,
+              colNum
+            ),
           });
         }
         nextGenerationGrid.push(row);
       }
       this.grid = nextGenerationGrid;
     },
-    checkNeighbors(rowNum: number, colNum: number): boolean {
+    assertCurrentNeighborsLivesForNextGenCellLife(
+      rowNum: number,
+      colNum: number
+    ): boolean {
       const leftHorizontalNeighbor =
         rowNum === 0 ? 0 : +this.grid[rowNum - 1][colNum].alive;
       const rightHorizontalNeighbor =
         rowNum === this.numRows - 1 ? 0 : +this.grid[rowNum + 1][colNum].alive;
-      const topVirticalNeighbor =
+      const topVerticalNeighbor =
         colNum === 0 ? 0 : +this.grid[rowNum][colNum - 1].alive;
-      const bottomVirticalNeighbor =
+      const bottomVerticalNeighbor =
         colNum === this.numCols - 1 ? 0 : +this.grid[rowNum][colNum + 1].alive;
       const leftTopNeighbor =
         rowNum === 0 || colNum === 0
@@ -77,8 +83,8 @@ export default Vue.extend({
       const numLiveNeighbors =
         leftHorizontalNeighbor +
         rightHorizontalNeighbor +
-        topVirticalNeighbor +
-        bottomVirticalNeighbor +
+        topVerticalNeighbor +
+        bottomVerticalNeighbor +
         leftTopNeighbor +
         rightTopNeighbor +
         bottomLeftNeighbor +

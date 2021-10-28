@@ -28,14 +28,14 @@
       <img
         alt="Vue logo"
         src="../../assets/logo.png"
-        @click="nextGenerationGrid"
+        @click="generateNextGenerationGrid"
       />
     </div>
     <div v-for="(row, $rowIndex) in grid" :key="$rowIndex">
       <span v-for="(col, $colIndex) in row" :key="$colIndex"
-        ><button v-if="col.alive" @click="toggleCell(col.id)">
+        ><button v-if="col.alive" @click="toggleCellLife(col.id)">
           *</button
-        ><button v-else @click="toggleCell(col.id)">
+        ><button v-else @click="toggleCellLife(col.id)">
           .
         </button></span
       >

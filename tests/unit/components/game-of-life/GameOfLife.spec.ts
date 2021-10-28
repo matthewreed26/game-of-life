@@ -153,8 +153,8 @@ describe('GameOfLife', () => {
     expect(component.grid).toEqual(empty4By8Grid);
   });
 
-  it('Should toggle a cell', () => {
-    expect(component.toggleCell(0));
+  it('Should toggle cell life', () => {
+    expect(component.toggleCellLife(0));
     expect(component.grid[0][0]).toEqual({ alive: true, id: 0 });
   });
 
@@ -165,21 +165,37 @@ describe('GameOfLife', () => {
     component.grid[2][3].alive = true;
     component.grid[3][3].alive = true;
     component.grid[3][2].alive = true;
-    expect(component.checkNeighbors(0, 0)).toBe(true);
-    expect(component.checkNeighbors(0, 1)).toBe(true);
-    expect(component.checkNeighbors(1, 0)).toBe(true);
-    expect(component.checkNeighbors(1, 1)).toBe(true);
-    expect(component.checkNeighbors(2, 2)).toBe(true);
-    expect(component.checkNeighbors(2, 3)).toBe(true);
-    expect(component.checkNeighbors(3, 2)).toBe(true);
-    expect(component.checkNeighbors(3, 3)).toBe(true);
+    expect(component.assertCurrentNeighborsLivesForNextGenCellLife(0, 0)).toBe(
+      true
+    );
+    expect(component.assertCurrentNeighborsLivesForNextGenCellLife(0, 1)).toBe(
+      true
+    );
+    expect(component.assertCurrentNeighborsLivesForNextGenCellLife(1, 0)).toBe(
+      true
+    );
+    expect(component.assertCurrentNeighborsLivesForNextGenCellLife(1, 1)).toBe(
+      true
+    );
+    expect(component.assertCurrentNeighborsLivesForNextGenCellLife(2, 2)).toBe(
+      true
+    );
+    expect(component.assertCurrentNeighborsLivesForNextGenCellLife(2, 3)).toBe(
+      true
+    );
+    expect(component.assertCurrentNeighborsLivesForNextGenCellLife(3, 2)).toBe(
+      true
+    );
+    expect(component.assertCurrentNeighborsLivesForNextGenCellLife(3, 3)).toBe(
+      true
+    );
   });
 
   it('Should generate beacon oscillator', () => {
-    expect(component.nextGenerationGrid());
+    expect(component.generateNextGenerationGrid());
     expect(component.grid[1][1].alive).toBe(true);
     expect(component.grid[2][2].alive).toBe(true);
-    expect(component.nextGenerationGrid());
+    expect(component.generateNextGenerationGrid());
     expect(component.grid[1][1].alive).toBe(false);
     expect(component.grid[2][2].alive).toBe(false);
   });
