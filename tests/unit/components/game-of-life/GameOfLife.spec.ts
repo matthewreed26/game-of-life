@@ -1,147 +1,10 @@
 import { shallowMount, Wrapper } from '@vue/test-utils';
 import GameOfLifeVue from '@/components/game-of-life/GameOfLife.vue';
-
-const empty4By8Grid = [
-  [
-    {
-      alive: false,
-      id: 0,
-    },
-    {
-      alive: false,
-      id: 1,
-    },
-    {
-      alive: false,
-      id: 2,
-    },
-    {
-      alive: false,
-      id: 3,
-    },
-    {
-      alive: false,
-      id: 4,
-    },
-    {
-      alive: false,
-      id: 5,
-    },
-    {
-      alive: false,
-      id: 6,
-    },
-    {
-      alive: false,
-      id: 7,
-    },
-  ],
-  [
-    {
-      alive: false,
-      id: 8,
-    },
-    {
-      alive: false,
-      id: 9,
-    },
-    {
-      alive: false,
-      id: 10,
-    },
-    {
-      alive: false,
-      id: 11,
-    },
-    {
-      alive: false,
-      id: 12,
-    },
-    {
-      alive: false,
-      id: 13,
-    },
-    {
-      alive: false,
-      id: 14,
-    },
-    {
-      alive: false,
-      id: 15,
-    },
-  ],
-  [
-    {
-      alive: false,
-      id: 16,
-    },
-    {
-      alive: false,
-      id: 17,
-    },
-    {
-      alive: false,
-      id: 18,
-    },
-    {
-      alive: false,
-      id: 19,
-    },
-    {
-      alive: false,
-      id: 20,
-    },
-    {
-      alive: false,
-      id: 21,
-    },
-    {
-      alive: false,
-      id: 22,
-    },
-    {
-      alive: false,
-      id: 23,
-    },
-  ],
-  [
-    {
-      alive: false,
-      id: 24,
-    },
-    {
-      alive: false,
-      id: 25,
-    },
-    {
-      alive: false,
-      id: 26,
-    },
-    {
-      alive: false,
-      id: 27,
-    },
-    {
-      alive: false,
-      id: 28,
-    },
-    {
-      alive: false,
-      id: 29,
-    },
-    {
-      alive: false,
-      id: 30,
-    },
-    {
-      alive: false,
-      id: 31,
-    },
-  ],
-];
+import { empty4By8Grid } from './Grid.fixture';
+import Vue from 'vue';
 
 describe('GameOfLife', () => {
-  const wrapper: Wrapper<GameOfLifeVue & { [key: string]: any }> = shallowMount(
+  const wrapper: Wrapper<Vue & { [key: string]: any }> = shallowMount(
     GameOfLifeVue
   );
   const component = wrapper.vm;
@@ -158,37 +21,43 @@ describe('GameOfLife', () => {
     expect(component.grid[0][0]).toEqual({ alive: true, id: 0 });
   });
 
-  it('Should check neighbors for next generation', () => {
+  it('Should correctly count neighbor cells inside grid that are alive', () => {
     component.grid[0][0].alive = true;
     component.grid[0][1].alive = true;
     component.grid[1][0].alive = true;
     component.grid[2][3].alive = true;
     component.grid[3][3].alive = true;
     component.grid[3][2].alive = true;
-    expect(component.assertCurrentNeighborsLivesForNextGenCellLife(0, 0)).toBe(
-      true
-    );
-    expect(component.assertCurrentNeighborsLivesForNextGenCellLife(0, 1)).toBe(
-      true
-    );
-    expect(component.assertCurrentNeighborsLivesForNextGenCellLife(1, 0)).toBe(
-      true
-    );
-    expect(component.assertCurrentNeighborsLivesForNextGenCellLife(1, 1)).toBe(
-      true
-    );
-    expect(component.assertCurrentNeighborsLivesForNextGenCellLife(2, 2)).toBe(
-      true
-    );
-    expect(component.assertCurrentNeighborsLivesForNextGenCellLife(2, 3)).toBe(
-      true
-    );
-    expect(component.assertCurrentNeighborsLivesForNextGenCellLife(3, 2)).toBe(
-      true
-    );
-    expect(component.assertCurrentNeighborsLivesForNextGenCellLife(3, 3)).toBe(
-      true
-    );
+
+    expect(component.countNeighborCellsIfInsideGridAndAlive(0, 0)).toBe(2);
+    expect(component.countNeighborCellsIfInsideGridAndAlive(3, 3)).toBe(2);
+  });
+
+  it('Should check neighbors for next generation', () => {
+    expect(
+      component.assertNextGenCellLifeBasedOnCurrentNeighborLives(0, 0)
+    ).toBe(true);
+    expect(
+      component.assertNextGenCellLifeBasedOnCurrentNeighborLives(0, 1)
+    ).toBe(true);
+    expect(
+      component.assertNextGenCellLifeBasedOnCurrentNeighborLives(1, 0)
+    ).toBe(true);
+    expect(
+      component.assertNextGenCellLifeBasedOnCurrentNeighborLives(1, 1)
+    ).toBe(true);
+    expect(
+      component.assertNextGenCellLifeBasedOnCurrentNeighborLives(2, 2)
+    ).toBe(true);
+    expect(
+      component.assertNextGenCellLifeBasedOnCurrentNeighborLives(2, 3)
+    ).toBe(true);
+    expect(
+      component.assertNextGenCellLifeBasedOnCurrentNeighborLives(3, 2)
+    ).toBe(true);
+    expect(
+      component.assertNextGenCellLifeBasedOnCurrentNeighborLives(3, 3)
+    ).toBe(true);
   });
 
   it('Should generate beacon oscillator', () => {

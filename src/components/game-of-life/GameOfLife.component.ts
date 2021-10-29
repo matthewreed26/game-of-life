@@ -1,10 +1,24 @@
 import Vue from 'vue';
+import {
+  isNeighborCellAlive,
+  isNeighborCellPositionOffGrid,
+  neighborCellPositions,
+} from './NeighborCell';
+
+interface Cell {
+  id: number;
+  alive: boolean;
+}
+
+type CellRow = Cell[];
+
+export type CellGrid = CellRow[];
 
 export default Vue.extend({
   name: 'GameOfLife',
   data() {
     return {
-      grid: [[{ id: -1, alive: false }]],
+      grid: [[{ id: -1, alive: false }]] as CellGrid,
       numRows: 4,
       numCols: 8,
     };
@@ -42,7 +56,7 @@ export default Vue.extend({
         for (let colNum = 0; colNum < this.numCols; colNum++) {
           row.push({
             id: idCount++,
-            alive: this.assertCurrentNeighborsLivesForNextGenCellLife(
+            alive: this.assertNextGenCellLifeBasedOnCurrentNeighborLives(
               rowNum,
               colNum
             ),
@@ -52,43 +66,14 @@ export default Vue.extend({
       }
       this.grid = nextGenerationGrid;
     },
-    assertCurrentNeighborsLivesForNextGenCellLife(
+    assertNextGenCellLifeBasedOnCurrentNeighborLives(
       rowNum: number,
       colNum: number
     ): boolean {
-      const leftHorizontalNeighbor =
-        rowNum === 0 ? 0 : +this.grid[rowNum - 1][colNum].alive;
-      const rightHorizontalNeighbor =
-        rowNum === this.numRows - 1 ? 0 : +this.grid[rowNum + 1][colNum].alive;
-      const topVerticalNeighbor =
-        colNum === 0 ? 0 : +this.grid[rowNum][colNum - 1].alive;
-      const bottomVerticalNeighbor =
-        colNum === this.numCols - 1 ? 0 : +this.grid[rowNum][colNum + 1].alive;
-      const leftTopNeighbor =
-        rowNum === 0 || colNum === 0
-          ? 0
-          : +this.grid[rowNum - 1][colNum - 1].alive;
-      const rightTopNeighbor =
-        rowNum === 0 || colNum === this.numCols - 1
-          ? 0
-          : +this.grid[rowNum - 1][colNum + 1].alive;
-      const bottomLeftNeighbor =
-        rowNum === this.numRows - 1 || colNum === 0
-          ? 0
-          : +this.grid[rowNum + 1][colNum - 1].alive;
-      const bottomRightNeighbor =
-        rowNum === this.numRows - 1 || colNum === this.numCols - 1
-          ? 0
-          : +this.grid[rowNum + 1][colNum + 1].alive;
-      const numLiveNeighbors =
-        leftHorizontalNeighbor +
-        rightHorizontalNeighbor +
-        topVerticalNeighbor +
-        bottomVerticalNeighbor +
-        leftTopNeighbor +
-        rightTopNeighbor +
-        bottomLeftNeighbor +
-        bottomRightNeighbor;
+      const numLiveNeighbors = this.countNeighborCellsIfInsideGridAndAlive(
+        rowNum,
+        colNum
+      );
       if (numLiveNeighbors > 3 || numLiveNeighbors < 2) {
         return false;
       } else if (numLiveNeighbors === 3) {
@@ -96,6 +81,31 @@ export default Vue.extend({
       } else {
         return this.grid[rowNum][colNum].alive;
       }
+    },
+    countNeighborCellsIfInsideGridAndAlive(
+      rowNum: number,
+      colNum: number
+    ): number {
+      let numLiveNeighbors = 0;
+      neighborCellPositions.forEach((neighborCellPosition) => {
+        numLiveNeighbors =
+          numLiveNeighbors +
+          (isNeighborCellPositionOffGrid(
+            neighborCellPosition,
+            rowNum,
+            colNum,
+            this.numRows,
+            this.numCols
+          )
+            ? 0
+            : +isNeighborCellAlive(
+                neighborCellPosition,
+                rowNum,
+                colNum,
+                this.grid
+              ));
+      });
+      return numLiveNeighbors;
     },
   },
 });
