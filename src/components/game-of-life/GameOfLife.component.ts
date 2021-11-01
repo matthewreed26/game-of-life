@@ -1,9 +1,9 @@
-import Vue from 'vue';
+import { defineComponent } from "vue";
 import {
   isNeighborCellAlive,
   isNeighborCellPositionOffGrid,
   neighborCellPositions,
-} from './NeighborCell';
+} from "./NeighborCell";
 
 interface Cell {
   id: number;
@@ -14,8 +14,8 @@ type CellRow = Cell[];
 
 export type CellGrid = CellRow[];
 
-export default Vue.extend({
-  name: 'GameOfLife',
+export default defineComponent({
+  name: "GameOfLife",
   data() {
     return {
       grid: [[{ id: -1, alive: false }]] as CellGrid,

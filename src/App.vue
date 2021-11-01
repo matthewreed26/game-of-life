@@ -5,24 +5,24 @@
 </template>
 
 <script lang="ts">
-  import Vue from 'vue';
-  import GameOfLife from './components/game-of-life/GameOfLife.vue';
+import { defineComponent } from "vue";
+import GameOfLife from "./components/game-of-life/GameOfLife.vue";
 
-  export default Vue.extend({
-    name: 'App',
-    components: {
-      GameOfLife,
-    },
-  });
+export default defineComponent({
+  name: "App",
+  components: {
+    GameOfLife
+  }
+});
 </script>
 
 <style>
-  #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-    margin-top: 60px;
-  }
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
 </style>
